@@ -1,4 +1,3 @@
-# simbution
 <img src="https://i.ibb.co/QYHDXJ9/simbution.png" align="left"
      title="simbution logo" width="200">
 
