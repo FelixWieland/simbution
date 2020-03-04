@@ -1,35 +1,27 @@
-import json, os, requests
+import json, os, requests, datetime
+from github import Github, Issue, GithubObject
 
 GITHUB_USER = os.environ['githubUser']
 GITHUB_PW = os.environ['githubPw']
 
-# The repository to add this issue to
 REPO_OWNER = 'FelixWieland'
 REPO_NAME = 'simbution'
 
-def make_github_issue(title, body=None, assignee=None, milestone=None, labels=None):
-    '''Create an issue on github.com using the given parameters.'''
-    # Our url to create issues via POST
-    url = 'https://api.github.com/repos/%s/%s/issues' % (REPO_OWNER, REPO_NAME)
-    # Create an authenticated session to create the issue
-    session = requests.Session()
-    session.auth = (GITHUB_USER, GITHUB_PW)
-    # Create our issue
-    issue = {'title': title,
-             'body': body,
-             'assignee': assignee,
-             'milestone': milestone,
-             'labels': labels}
-    # Add the issue to our repository
-    r = session.post(url, json.dumps(issue))
-    if r.status_code == 201:
-        return 'Successfully created Issue'
-    else:
-        return 'Could not create Issue'
+ghb = Github(GITHUB_USER, GITHUB_PW)
+
+def make_github_issue(title, body=GithubObject.NotSet, assignee=GithubObject.NotSet, milestone=GithubObject.NotSet, labels=GithubObject.NotSet):
+    try:
+        repo = ghb.get_repo(REPO_OWNER + "/" + REPO_NAME)
+        issue = repo.create_issue(title, body, assignee, milestone, labels)
+        issue.edit(state='closed')
+        return "Created new issue, and closed it afterwards"
+    except:
+        return "Failed to create new issue"
 
 def simbution(event, context):
-
-    resp = make_github_issue('Issue Title', 'Body text', 'assigned_user', None, ['bug'])
+    title = datetime.datetime.now().isoformat() + " - simulated contribution"
+    body = "This is a simulated contribution to keep the contribution graph green."
+    resp = make_github_issue(title, body, labels=['simbution'])
 
     response = {
         "statusCode": 200,
