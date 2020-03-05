@@ -6,6 +6,7 @@ Simbution simulates GitHub contributions to keep the contribution graph green. T
 <br/>
 
 # How it works
-<img src="https://i.ibb.co/60X0CRy/simbution.png" align="center"
-     title="simbution logo" width="600">
-
+<p align="center">
+     <img src="https://i.ibb.co/60X0CRy/simbution.png"
+          title="simbution logo" width="600">
+</p>
